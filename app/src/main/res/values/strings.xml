@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Just Java</string>
+    <string name="name_hint">Customer name </string>
+    <string name="toppings">Toppings</string>
+    <string name="whipped_cream">Whipped cream</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="quantity">Quantity</string>
+    <string name="increment_operator">+</string>
+    <string name="decrement_operator">-</string>
+    <string name="initial_quantity">0</string>
+    <string name="price_text">Price</string>
+    <string name="initial_price">0</string>
+    <string name="order_button_text">Order</string>
+    <string name="sender_address">justjava@example.com</string>
+    <string name="subject_initial">Just Java Order for </string>
+    <string name="name_template">Name: </string>
+    <string name="check_wipped_cream_text">\nAdd whipped cream?</string>
+    <string name="true_response">true</string>
+    <string name="false_response">false</string>
+    <string name="check_chocolate_text">\nAdd chocolate?</string>
+    <string name="quantity_template">\nQuantity: </string>
+    <string name="total_cost_template">\nTotal: </string>
+    <string name="thanks_template">\nThank you!</string>
+    <string name="mail_to">mailto:</string>
+    <string name="order_underflow_error">You cannot have less than 1 coffee</string>
 </resources>

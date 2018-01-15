@@ -25,41 +25,40 @@ public class MainActivity extends AppCompatActivity {
     static int quantity = 0;
     static boolean isWhippedCreamChecked = false;
     static boolean isChocolateChecked = false;
+    int pricePerUnit = 5;
     // this method is called when 'ORDER' button is pressed.
     public void submitOrder(View view)
     {
 
 //        orderSummary();
-        String senderAddress  = "justjava@example.com";
-
+        String senderAddress  = getString(R.string.sender_address);
         String message;
-        int pricePerUnit = 5;
-        EditText custName = (EditText) findViewById(R.id.customer_name_text);
-        String subject = "Just Java Order for " + custName.getText().toString();
-        message = "Name: " + custName.getText().toString();
-        message += "\nAdd whipped cream?";
+        EditText custName = findViewById(R.id.customer_name_text);
+        String subject = getString(R.string.subject_initial) + " " + custName.getText().toString();
+        message = getString(R.string.name_template) + custName.getText().toString();
+        message += getString(R.string.check_wipped_cream_text);
         if (isWhippedCreamChecked)
         {
-            message += "true";
-            pricePerUnit += 1;
+            message += getString(R.string.true_response);
+            //pricePerUnit += 1;
         }
         else
-            message += "false";
-        message += "\nAdd chocolate?";
+            message += getString(R.string.false_response);
+        message += getString(R.string.check_chocolate_text);
         if (isChocolateChecked)
         {
-            message += "true";
-            pricePerUnit += 2;
+            message += getString(R.string.true_response);
+            //pricePerUnit += 2;
         }
         else
-            message += "false";
-        message += "\nQuantity: " + quantity;
-        message += "\nTotal: #" + quantity * pricePerUnit;
-        message += "\nThank you!";
+            message += getString(R.string.false_response);
+        message += getString(R.string.quantity_template) + quantity;
+        message += getString(R.string.total_cost_template)+ NumberFormat.getCurrencyInstance().format(quantity * pricePerUnit);
+        message += getString(R.string.thanks_template);
 
         // setup intents
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
+        intent.setData(Uri.parse(getString(R.string.mail_to)));
         intent.putExtra(Intent.EXTRA_EMAIL, senderAddress);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, message);
@@ -68,41 +67,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    private void orderSummary()
+
+    private void displayCurrentPrice()
     {
-
-        int pricePerUnit = 5;
-        EditText custName = (EditText) findViewById(R.id.customer_name_text);
-        String message = "Name: " + custName.getText().toString();
-        message += "\nAdd whipped cream?";
-        if (isWhippedCreamChecked)
-        {
-            message += "true";
-            pricePerUnit += 1;
-        }
-        else
-            message += "false";
-        message += "\nAdd chocolate?";
-        if (isChocolateChecked)
-        {
-            message += "true";
-            pricePerUnit += 2;
-        }
-        else
-            message += "false";
-        message += "\nQuantity: " + quantity;
-        message += "\nTotal: #" + quantity * pricePerUnit;
-        message += "\nThank you!";
-        TextView view = (TextView) findViewById(R.id.order_summary_textview);
-        view.setText(message);
-
+//        if (isWhippedCreamChecked)
+//        {
+//            pricePerUnit += 1;
+//        }
+//        if (isChocolateChecked)
+//        {
+//            pricePerUnit += 2;
+//        }
+        int currentPrice= quantity * pricePerUnit;
+        TextView currentPriceTextView = findViewById(R.id.order_total_textview);
+        currentPriceTextView.setText(NumberFormat.getCurrencyInstance().format(currentPrice));
     }
-
-
     public void increaseQuantity(View view)
     {
         quantity++;
-        displayQuantity(quantity);
+        displayQuantity();
+        displayCurrentPrice();
     }
 
     public void decreaseQuantity(View view) {
@@ -110,32 +94,47 @@ public class MainActivity extends AppCompatActivity {
             quantity--;
         else
         {
-            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.order_underflow_error), Toast.LENGTH_SHORT).show();
             return;
         }
-        displayQuantity(quantity);
+        displayQuantity();
+        displayCurrentPrice();
     }
 
-    private void displayQuantity(int number)
+    private void displayQuantity()
     {
-        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
-        quantityTextView.setText("" + number);
+        TextView quantityTextView = findViewById(R.id.quantity_text_view);
+        quantityTextView.setText(Integer.toString(quantity));
     }
 
     public void setIsWhippedCreamChecked(View view) {
-        CheckBox whippedCreamCB = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
+        CheckBox whippedCreamCB = findViewById(R.id.whipped_cream_checkbox);
         if (whippedCreamCB.isChecked())
+        {
             isWhippedCreamChecked = true;
+            pricePerUnit += 1;
+        }
         else
+        {
             isWhippedCreamChecked = false;
+            pricePerUnit -= 1;
+        }
+        displayCurrentPrice();
     }
 
     public void setIsChocolateChecked(View view)
     {
-        CheckBox chocolateCB = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        CheckBox chocolateCB = findViewById(R.id.chocolate_checkbox);
         if (chocolateCB.isChecked())
+        {
             isChocolateChecked = true;
+            pricePerUnit += 2;
+        }
         else
+        {
             isChocolateChecked = false;
+            pricePerUnit -= 2;
+        }
+        displayCurrentPrice();
     }
 }
